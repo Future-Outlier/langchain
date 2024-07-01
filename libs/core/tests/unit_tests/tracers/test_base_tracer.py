@@ -13,10 +13,11 @@ from freezegun import freeze_time
 from langsmith import Client, traceable
 
 from langchain_core.callbacks import CallbackManager
+from langchain_core.exceptions import TracerException
 from langchain_core.messages import HumanMessage
 from langchain_core.outputs import LLMResult
 from langchain_core.runnables import chain as as_runnable
-from langchain_core.tracers.base import BaseTracer, TracerException
+from langchain_core.tracers.base import BaseTracer
 from langchain_core.tracers.schemas import Run
 
 SERIALIZED = {"id": ["llm"]}
@@ -68,8 +69,6 @@ def test_tracer_llm_run() -> None:
             {"name": "end", "time": datetime.now(timezone.utc)},
         ],
         extra={},
-        execution_order=1,
-        child_execution_order=1,
         serialized=SERIALIZED,
         inputs={"prompts": []},
         outputs=LLMResult(generations=[[]]),  # type: ignore[arg-type]
@@ -103,8 +102,6 @@ def test_tracer_chat_model_run() -> None:
             {"name": "end", "time": datetime.now(timezone.utc)},
         ],
         extra={},
-        execution_order=1,
-        child_execution_order=1,
         serialized=SERIALIZED_CHAT,
         inputs=dict(prompts=["Human: "]),
         outputs=LLMResult(generations=[[]]),  # type: ignore[arg-type]
@@ -141,8 +138,6 @@ def test_tracer_multiple_llm_runs() -> None:
             {"name": "end", "time": datetime.now(timezone.utc)},
         ],
         extra={},
-        execution_order=1,
-        child_execution_order=1,
         serialized=SERIALIZED,
         inputs=dict(prompts=[]),
         outputs=LLMResult(generations=[[]]),  # type: ignore[arg-type]
@@ -174,8 +169,6 @@ def test_tracer_chain_run() -> None:
             {"name": "end", "time": datetime.now(timezone.utc)},
         ],
         extra={},
-        execution_order=1,
-        child_execution_order=1,
         serialized={"name": "chain"},
         inputs={},
         outputs={},
@@ -204,8 +197,6 @@ def test_tracer_tool_run() -> None:
             {"name": "end", "time": datetime.now(timezone.utc)},
         ],
         extra={},
-        execution_order=1,
-        child_execution_order=1,
         serialized={"name": "tool"},
         inputs={"input": "test"},
         outputs={"output": "test"},
@@ -266,8 +257,6 @@ def test_tracer_nested_run() -> None:
             {"name": "end", "time": datetime.now(timezone.utc)},
         ],
         extra={},
-        execution_order=1,
-        child_execution_order=4,
         serialized={"name": "chain"},
         inputs={},
         outputs={},
@@ -285,8 +274,6 @@ def test_tracer_nested_run() -> None:
                     {"name": "end", "time": datetime.now(timezone.utc)},
                 ],
                 extra={},
-                execution_order=2,
-                child_execution_order=3,
                 serialized={"name": "tool"},
                 inputs=dict(input="test"),
                 outputs=dict(output="test"),
@@ -306,8 +293,6 @@ def test_tracer_nested_run() -> None:
                             {"name": "end", "time": datetime.now(timezone.utc)},
                         ],
                         extra={},
-                        execution_order=3,
-                        child_execution_order=3,
                         serialized=SERIALIZED,
                         inputs=dict(prompts=[]),
                         outputs=LLMResult(generations=[[]]),  # type: ignore[arg-type]
@@ -328,8 +313,6 @@ def test_tracer_nested_run() -> None:
                     {"name": "end", "time": datetime.now(timezone.utc)},
                 ],
                 extra={},
-                execution_order=4,
-                child_execution_order=4,
                 serialized=SERIALIZED,
                 inputs=dict(prompts=[]),
                 outputs=LLMResult(generations=[[]]),  # type: ignore[arg-type]
@@ -358,8 +341,6 @@ def test_tracer_llm_run_on_error() -> None:
             {"name": "error", "time": datetime.now(timezone.utc)},
         ],
         extra={},
-        execution_order=1,
-        child_execution_order=1,
         serialized=SERIALIZED,
         inputs=dict(prompts=[]),
         outputs=None,
@@ -391,8 +372,6 @@ def test_tracer_llm_run_on_error_callback() -> None:
             {"name": "error", "time": datetime.now(timezone.utc)},
         ],
         extra={},
-        execution_order=1,
-        child_execution_order=1,
         serialized=SERIALIZED,
         inputs=dict(prompts=[]),
         outputs=None,
@@ -429,8 +408,6 @@ def test_tracer_chain_run_on_error() -> None:
             {"name": "error", "time": datetime.now(timezone.utc)},
         ],
         extra={},
-        execution_order=1,
-        child_execution_order=1,
         serialized={"name": "chain"},
         inputs={},
         outputs=None,
@@ -461,8 +438,6 @@ def test_tracer_tool_run_on_error() -> None:
             {"name": "error", "time": datetime.now(timezone.utc)},
         ],
         extra={},
-        execution_order=1,
-        child_execution_order=1,
         serialized={"name": "tool"},
         inputs=dict(input="test"),
         outputs=None,
@@ -534,8 +509,6 @@ def test_tracer_nested_runs_on_error() -> None:
             {"name": "error", "time": datetime.now(timezone.utc)},
         ],
         extra={},
-        execution_order=1,
-        child_execution_order=5,
         serialized={"name": "chain"},
         error=repr(exception),
         inputs={},
@@ -554,8 +527,6 @@ def test_tracer_nested_runs_on_error() -> None:
                     {"name": "end", "time": datetime.now(timezone.utc)},
                 ],
                 extra={},
-                execution_order=2,
-                child_execution_order=2,
                 serialized=SERIALIZED,
                 error=None,
                 inputs=dict(prompts=[]),
@@ -574,8 +545,6 @@ def test_tracer_nested_runs_on_error() -> None:
                     {"name": "end", "time": datetime.now(timezone.utc)},
                 ],
                 extra={},
-                execution_order=3,
-                child_execution_order=3,
                 serialized=SERIALIZED,
                 error=None,
                 inputs=dict(prompts=[]),
@@ -594,8 +563,6 @@ def test_tracer_nested_runs_on_error() -> None:
                     {"name": "error", "time": datetime.now(timezone.utc)},
                 ],
                 extra={},
-                execution_order=4,
-                child_execution_order=5,
                 serialized={"name": "tool"},
                 error=repr(exception),
                 inputs=dict(input="test"),
@@ -614,8 +581,6 @@ def test_tracer_nested_runs_on_error() -> None:
                             {"name": "error", "time": datetime.now(timezone.utc)},
                         ],
                         extra={},
-                        execution_order=5,
-                        child_execution_order=5,
                         serialized=SERIALIZED,
                         error=repr(exception),
                         inputs=dict(prompts=[]),

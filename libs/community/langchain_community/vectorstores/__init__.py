@@ -27,6 +27,9 @@ if TYPE_CHECKING:
         VectorStore,
     )
 
+    from langchain_community.vectorstores.aerospike import (
+        Aerospike,
+    )
     from langchain_community.vectorstores.alibabacloud_opensearch import (
         AlibabaCloudOpenSearch,
         AlibabaCloudOpenSearchSettings,
@@ -51,6 +54,9 @@ if TYPE_CHECKING:
     )
     from langchain_community.vectorstores.azure_cosmos_db import (
         AzureCosmosDBVectorSearch,
+    )
+    from langchain_community.vectorstores.azure_cosmos_db_no_sql import (
+        AzureCosmosDBNoSqlVectorSearch,
     )
     from langchain_community.vectorstores.azuresearch import (
         AzureSearch,
@@ -150,6 +156,10 @@ if TYPE_CHECKING:
     from langchain_community.vectorstores.llm_rails import (
         LLMRails,
     )
+    from langchain_community.vectorstores.manticore_search import (
+        ManticoreSearch,
+        ManticoreSearchSettings,
+    )
     from langchain_community.vectorstores.marqo import (
         Marqo,
     )
@@ -177,6 +187,9 @@ if TYPE_CHECKING:
     )
     from langchain_community.vectorstores.opensearch_vector_search import (
         OpenSearchVectorSearch,
+    )
+    from langchain_community.vectorstores.oraclevs import (
+        OracleVS,
     )
     from langchain_community.vectorstores.pathway import (
         PathwayVectorClient,
@@ -233,6 +246,7 @@ if TYPE_CHECKING:
         TencentVectorDB,
     )
     from langchain_community.vectorstores.thirdai_neuraldb import (
+        NeuralDBClientVectorStore,
         NeuralDBVectorStore,
     )
     from langchain_community.vectorstores.tidb_vector import (
@@ -283,11 +297,15 @@ if TYPE_CHECKING:
     from langchain_community.vectorstores.zep import (
         ZepVectorStore,
     )
+    from langchain_community.vectorstores.zep_cloud import (
+        ZepCloudVectorStore,
+    )
     from langchain_community.vectorstores.zilliz import (
         Zilliz,
     )
 
 __all__ = [
+    "Aerospike",
     "AlibabaCloudOpenSearch",
     "AlibabaCloudOpenSearchSettings",
     "AnalyticDB",
@@ -296,6 +314,7 @@ __all__ = [
     "AstraDB",
     "AtlasDB",
     "AwaDB",
+    "AzureCosmosDBNoSqlVectorSearch",
     "AzureCosmosDBVectorSearch",
     "AzureSearch",
     "BESVectorStore",
@@ -333,6 +352,8 @@ __all__ = [
     "LLMRails",
     "LanceDB",
     "Lantern",
+    "ManticoreSearch",
+    "ManticoreSearchSettings",
     "Marqo",
     "MatchingEngine",
     "Meilisearch",
@@ -342,7 +363,9 @@ __all__ = [
     "MyScale",
     "MyScaleSettings",
     "Neo4jVector",
+    "NeuralDBClientVectorStore",
     "NeuralDBVectorStore",
+    "OracleVS",
     "OpenSearchVectorSearch",
     "PGEmbedding",
     "PGVector",
@@ -379,10 +402,12 @@ __all__ = [
     "Weaviate",
     "Yellowbrick",
     "ZepVectorStore",
+    "ZepCloudVectorStore",
     "Zilliz",
 ]
 
 _module_lookup = {
+    "Aerospike": "langchain_community.vectorstores.aerospike",
     "AlibabaCloudOpenSearch": "langchain_community.vectorstores.alibabacloud_opensearch",  # noqa: E501
     "AlibabaCloudOpenSearchSettings": "langchain_community.vectorstores.alibabacloud_opensearch",  # noqa: E501
     "AnalyticDB": "langchain_community.vectorstores.analyticdb",
@@ -391,7 +416,8 @@ _module_lookup = {
     "AstraDB": "langchain_community.vectorstores.astradb",
     "AtlasDB": "langchain_community.vectorstores.atlas",
     "AwaDB": "langchain_community.vectorstores.awadb",
-    "AzureCosmosDBVectorSearch": "langchain_community.vectorstores.azure_cosmos_db",
+    "AzureCosmosDBNoSqlVectorSearch": "langchain_community.vectorstores.azure_cosmos_db_no_sql",  # noqa: E501
+    "AzureCosmosDBVectorSearch": "langchain_community.vectorstores.azure_cosmos_db",  # noqa: E501
     "AzureSearch": "langchain_community.vectorstores.azuresearch",
     "BaiduVectorDB": "langchain_community.vectorstores.baiduvectordb",
     "BESVectorStore": "langchain_community.vectorstores.baiducloud_vector_search",
@@ -428,6 +454,8 @@ _module_lookup = {
     "LLMRails": "langchain_community.vectorstores.llm_rails",
     "LanceDB": "langchain_community.vectorstores.lancedb",
     "Lantern": "langchain_community.vectorstores.lantern",
+    "ManticoreSearch": "langchain_community.vectorstores.manticore_search",
+    "ManticoreSearchSettings": "langchain_community.vectorstores.manticore_search",
     "Marqo": "langchain_community.vectorstores.marqo",
     "MatchingEngine": "langchain_community.vectorstores.matching_engine",
     "Meilisearch": "langchain_community.vectorstores.meilisearch",
@@ -437,8 +465,10 @@ _module_lookup = {
     "MyScale": "langchain_community.vectorstores.myscale",
     "MyScaleSettings": "langchain_community.vectorstores.myscale",
     "Neo4jVector": "langchain_community.vectorstores.neo4j_vector",
+    "NeuralDBClientVectorStore": "langchain_community.vectorstores.thirdai_neuraldb",
     "NeuralDBVectorStore": "langchain_community.vectorstores.thirdai_neuraldb",
     "OpenSearchVectorSearch": "langchain_community.vectorstores.opensearch_vector_search",  # noqa: E501
+    "OracleVS": "langchain_community.vectorstores.oraclevs",
     "PathwayVectorClient": "langchain_community.vectorstores.pathway",
     "PGEmbedding": "langchain_community.vectorstores.pgembedding",
     "PGVector": "langchain_community.vectorstores.pgvector",
@@ -474,6 +504,7 @@ _module_lookup = {
     "Weaviate": "langchain_community.vectorstores.weaviate",
     "Yellowbrick": "langchain_community.vectorstores.yellowbrick",
     "ZepVectorStore": "langchain_community.vectorstores.zep",
+    "ZepCloudVectorStore": "langchain_community.vectorstores.zep_cloud",
     "Zilliz": "langchain_community.vectorstores.zilliz",
 }
 
@@ -483,6 +514,3 @@ def __getattr__(name: str) -> Any:
         module = importlib.import_module(_module_lookup[name])
         return getattr(module, name)
     raise AttributeError(f"module {__name__} has no attribute {name}")
-
-
-__all__ = list(_module_lookup.keys())

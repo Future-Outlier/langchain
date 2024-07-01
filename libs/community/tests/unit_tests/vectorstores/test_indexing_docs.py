@@ -46,9 +46,11 @@ def test_compatible_vectorstore_documentation() -> None:
 
     # These are mentioned in the indexing.ipynb documentation
     documented = {
+        "Aerospike",
         "AnalyticDB",
         "AstraDB",
         "AzureCosmosDBVectorSearch",
+        "AzureCosmosDBNoSqlVectorSearch",
         "AzureSearch",
         "AwaDB",
         "Bagel",
@@ -73,6 +75,7 @@ def test_compatible_vectorstore_documentation() -> None:
         "MomentoVectorIndex",
         "MyScale",
         "OpenSearchVectorSearch",
+        "OracleVS",
         "PGVector",
         "Pinecone",
         "Qdrant",
@@ -91,10 +94,13 @@ def test_compatible_vectorstore_documentation() -> None:
         "Vald",
         "VDMS",
         "Vearch",
+        "Vectara",
         "VespaStore",
         "VLite",
         "Weaviate",
+        "Yellowbrick",
         "ZepVectorStore",
+        "ZepCloudVectorStore",
         "Zilliz",
         "Lantern",
         "OpenSearchVectorSearch",
